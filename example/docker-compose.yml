@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  api:
+    image: aiogram/telegram-bot-api:latest
+    restart: always
+    environment:
+      TELEGRAM_API_ID:
+      TELEGRAM_API_HASH:
+    volumes:
+      - telegram-bot-api-data:/var/lib/telegram-bot-api
+
+  nginx:
+    image: nginx:1.19-alpine
+    restart: always
+    depends_on:
+      - api
+    volumes:
+      - telegram-bot-api-data:/var/lib/telegram-bot-api
+      - ./nginx:/etc/nginx/conf.d/
+    ports:
+      - 80:80
+
+volumes:
+  telegram-bot-api-data:
