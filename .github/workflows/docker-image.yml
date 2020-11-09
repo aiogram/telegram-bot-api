@@ -1,9 +1,9 @@
 name: Docker Image
 
-on:
-  push:
-    branches:
-      - master
+on: []
+#  push:
+#    branches:
+#      - master
 
 jobs:
   multi:

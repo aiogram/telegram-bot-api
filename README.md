@@ -41,7 +41,9 @@ default value of the maximum webhook connections per bot
 
 log verbosity level
 
-Logs will be stored to `/var/log/telegram-bot-server` directory inside container
+### `TELEGRAM_LOG_FILE`
+
+Filename where logs will be redirected (By default logs will be written to stdout/stderr streams)
 
 ### `TELEGRAM_MAX_CONNECTIONS`
 

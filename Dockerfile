@@ -13,8 +13,7 @@ RUN mkdir -p build \
 
 FROM alpine:3.12
 
-ENV TELEGRAM_LOGS_DIR="/var/log/telegram-bot-api" \
-    TELEGRAM_WORK_DIR="/var/lib/telegram-bot-api" \
+ENV TELEGRAM_WORK_DIR="/var/lib/telegram-bot-api" \
     TELEGRAM_TEMP_DIR="/tmp/telegram-bot-api"
 
 RUN apk add --no-cache --update openssl libstdc++
@@ -23,9 +22,8 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN addgroup -g 101 -S telegram-bot-api \
  && adduser -S -D -H -u 101 -h ${TELEGRAM_WORK_DIR} -s /sbin/nologin -G telegram-bot-api -g telegram-bot-api telegram-bot-api \
  && chmod +x /docker-entrypoint.sh \
- && mkdir -p ${TELEGRAM_LOGS_DIR} ${TELEGRAM_WORK_DIR} ${TELEGRAM_TEMP_DIR} \
- && chown telegram-bot-api:telegram-bot-api ${TELEGRAM_LOGS_DIR} ${TELEGRAM_WORK_DIR} \
- && chown nobody:nobody /tmp/telegram-bot-api
+ && mkdir -p ${TELEGRAM_WORK_DIR} ${TELEGRAM_TEMP_DIR} \
+ && chown telegram-bot-api:telegram-bot-api ${TELEGRAM_WORK_DIR} ${TELEGRAM_TEMP_DIR}
 
 EXPOSE 8081/tcp 8082/tcp
 ENTRYPOINT ["/docker-entrypoint.sh"]
