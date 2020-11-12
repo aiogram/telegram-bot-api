@@ -15,5 +15,5 @@ publish:
 	docker push $(image_name):$(image_tag)
 	docker push $(image_name):latest
 
-.PHONY: relese
+.PHONY: release
 release: update build publish
