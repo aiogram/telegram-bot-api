@@ -34,8 +34,10 @@ jobs:
         with:
           format: YYYYMMDD
       - name: Set version
+        id: current-version
         run: |
           TG_SERVER_VERSION=$(cat telegram-bot-api/CMakeLists.txt | grep TelegramBotApi | cut -d " " -f3)
+          echo "TG_SERVER_VERSION=${TG_SERVER_VERSION}" >> $GITHUB_ENV
           echo "Parsed version: ${TG_SERVER_VERSION}"
       - name: Build and push
         uses: docker/build-push-action@v2
@@ -47,4 +49,4 @@ jobs:
           tags: |
             aiogram/telegram-bot-api:latest
             aiogram/telegram-bot-api:${{ steps.current-time.outputs.formattedTime }}
-            aiogram/telegram-bot-api:${{ env.TG_SERVER_VERSION }}
+            aiogram/telegram-bot-api:${{ steps.current-version.env.TG_SERVER_VERSION }}
