@@ -49,4 +49,4 @@ jobs:
           tags: |
             aiogram/telegram-bot-api:latest
             aiogram/telegram-bot-api:${{ steps.current-time.outputs.formattedTime }}
-            aiogram/telegram-bot-api:${{ steps.current-version.env.TG_SERVER_VERSION }}
+            aiogram/telegram-bot-api:${{ env.TG_SERVER_VERSION }}
