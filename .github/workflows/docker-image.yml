@@ -34,9 +34,8 @@ jobs:
         with:
           format: YYYYMMDD
       - name: Set version
-        env:
-          TG_SERVER_VERSION: $(cat telegram-bot-api/CMakeLists.txt | grep TelegramBotApi | cut -d " " -f3)
         run: |
+          TG_SERVER_VERSION=$(cat telegram-bot-api/CMakeLists.txt | grep TelegramBotApi | cut -d " " -f3)
           echo "Parsed version: ${TG_SERVER_VERSION}"
       - name: Build and push
         uses: docker/build-push-action@v2
