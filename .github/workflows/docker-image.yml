@@ -28,11 +28,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_LOGIN }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Get current time
-        uses: 1466587594/get-current-time@v2
-        id: current-time
-        with:
-          format: YYYYMMDD
+      # - name: Get current time
+      #   uses: 1466587594/get-current-time@v2
+      #   id: current-time
+      #   with:
+      #     format: YYYYMMDD
       - name: Set version
         id: current-version
         run: |
@@ -48,5 +48,5 @@ jobs:
           push: true
           tags: |
             aiogram/telegram-bot-api:latest
-            aiogram/telegram-bot-api:${{ steps.current-time.outputs.formattedTime }}
             aiogram/telegram-bot-api:${{ env.TG_SERVER_VERSION }}
+          #  aiogram/telegram-bot-api:${{ steps.current-time.outputs.formattedTime }}
