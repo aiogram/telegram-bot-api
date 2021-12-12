@@ -1,6 +1,6 @@
 # Example
 
-By default [tdlib/telegram-bot-api](https://github.com/tdlib/telegram-bot-api) 
+By default, [tdlib/telegram-bot-api](https://github.com/tdlib/telegram-bot-api) 
 doesn't provide possibility to download files from API (without local-mode) 
 so that's meat you will need to expose files somehow differently, for example by nginx.
 

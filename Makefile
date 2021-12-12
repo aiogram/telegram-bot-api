@@ -3,7 +3,7 @@ image_tag := $(shell date +%Y%m%d)
 
 .PHONY: update
 update:
-	git submodule update --init --recursive --remote --merge
+	git submodule -q foreach git pull -q origin master
 
 .PHONY: build
 build:
