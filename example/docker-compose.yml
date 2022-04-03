@@ -19,7 +19,7 @@ services:
       - telegram-bot-api-data:/var/lib/telegram-bot-api
       - ./nginx:/etc/nginx/conf.d/
     ports:
-      - 80:80
+      - "80:80"
 
 volumes:
   telegram-bot-api-data:
