@@ -80,7 +80,7 @@ services:
     volumes:
       - telegram-bot-api-data:/var/lib/telegram-bot-api
     ports:
-      - 8081:8081
+      - "8081:8081"
 
 volumes:
   telegram-bot-api-data:
