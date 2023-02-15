@@ -57,6 +57,9 @@ HTTP proxy server for outgoing webhook requests in the format http://host:port
 
 allow the Bot API server to serve local requests
 
+### `TELEGRAM_HTTP_IP_ADDRESS`
+
+Use the `TELEGRAM_HTTP_IP_ADDRESS: "[::]"` parameter to listen on the ipv6 intranet
 
 ## Start with persistent storage
 
