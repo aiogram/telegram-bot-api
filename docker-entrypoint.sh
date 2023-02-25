@@ -37,6 +37,9 @@ fi
 if [ -n "$TELEGRAM_LOCAL" ]; then
   CUSTOM_ARGS="${CUSTOM_ARGS} --local"
 fi
+if [ -n "$TELEGRAM_HTTP_IP_ADDRESS" ]; then
+  CUSTOM_ARGS="${CUSTOM_ARGS} --http-ip-address=$TELEGRAM_HTTP_IP_ADDRESS"
+fi
 
 COMMAND="telegram-bot-api ${DEFAULT_ARGS}${CUSTOM_ARGS}"
 
