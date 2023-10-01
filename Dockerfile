@@ -5,10 +5,11 @@ WORKDIR /usr/src/telegram-bot-api
 
 RUN apk add --no-cache --update alpine-sdk linux-headers git zlib-dev openssl-dev gperf cmake
 COPY telegram-bot-api /usr/src/telegram-bot-api
+ARG nproc=1
 RUN mkdir -p build \
  && cd build \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. .. \
- && cmake --build . --target install -j $(nproc) \
+ && cmake --build . --target install -j ${nproc} \
  && strip /usr/src/telegram-bot-api/bin/telegram-bot-api
 
 FROM alpine:3.18

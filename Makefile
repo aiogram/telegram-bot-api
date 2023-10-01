@@ -5,7 +5,7 @@ image_tag := $(shell date +%Y%m%d)
 build:
 	rm -rf telegram-bot-api
 	git clone --recursive https://github.com/tdlib/telegram-bot-api.git
-	docker build -t $(image_name):$(image_tag) .
+	docker build -t $(image_name):$(image_tag) --build-arg nproc=$(shell nproc) .
 	docker tag $(image_name):$(image_tag) $(image_name):latest
 
 .PHONY: publish
