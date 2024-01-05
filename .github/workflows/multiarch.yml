@@ -19,6 +19,7 @@ jobs:
     env:
       IMAGE_TAG: ghcr.io/${{ github.repository_owner }}/telegram-bot-api
       IMAGE_TAG_DH: ${{ secrets.DOCKERHUB_OWNER }}/telegram-bot-api
+    permissions: write-all
     strategy:
       matrix:
         arch:
@@ -154,6 +155,7 @@ jobs:
     name: Create and push multi-arch Docker manifest
     runs-on: ubuntu-latest
     if: ${{ github.event_name != 'pull_request' }}
+    permissions: write-all
     env:
       DOCKER_CLI_EXPERIMENTAL: enabled
     needs: build
