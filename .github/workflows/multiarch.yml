@@ -4,8 +4,13 @@ name: Docker multi-arch build and push
 
 on:
   push:
-  pull_request:
-
+    branches:
+      - main
+      - master
+  #      - rework-structure
+  #  pull_request:
+  schedule:
+    - cron: '20 4 * * *'
 
 jobs:
   build:
@@ -16,7 +21,13 @@ jobs:
       IMAGE_TAG_DH: ${{ secrets.DOCKERHUB_OWNER }}/telegram-bot-api
     strategy:
       matrix:
-        arch: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64, linux/ppc64le]
+        arch:
+          - linux/386
+          - linux/amd64
+          - linux/arm/v6
+          - linux/arm/v7
+          - linux/arm64
+          - linux/ppc64le
 
     steps:
       - name: Checkout current repo
