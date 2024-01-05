@@ -189,6 +189,13 @@ jobs:
 
       - name: Create and push manifest
         run: |
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linux386
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxamd64
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarmv6
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarmv7
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarm64
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxppc64le
+
           docker manifest create ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }} \
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386 \
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64 \
