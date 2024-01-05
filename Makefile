@@ -1,13 +1,11 @@
 image_name := aiogram/telegram-bot-api
 image_tag := $(shell date +%Y%m%d)
 
-.PHONY: update
-update:
-	git submodule -q foreach git pull -q origin master
-
 .PHONY: build
 build:
-	docker build -t $(image_name):$(image_tag) .
+	rm -rf telegram-bot-api
+	git clone --recursive https://github.com/tdlib/telegram-bot-api.git
+	docker build -t $(image_name):$(image_tag) --build-arg nproc=$(shell nproc) .
 	docker tag $(image_name):$(image_tag) $(image_name):latest
 
 .PHONY: publish
