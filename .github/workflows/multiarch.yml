@@ -120,15 +120,15 @@ jobs:
           push: false
           load: true
           tags: |
-            tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
+            telegrambotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
 
       - name: Tag and push image
         if: ${{ github.event_name != 'pull_request' }}
         run: |
-          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
-          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
-          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
-          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
+          docker tag telegrambotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
+          docker tag telegrambotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
+          docker tag telegrambotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
+          docker tag telegrambotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
           docker push ${{ env.IMAGE_TAG}}:${{ env.HASH_VERSION}}-${{ env.SAFE_ARCH }}
           docker push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
           docker push ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
@@ -142,7 +142,7 @@ jobs:
       - name: Save image as tar archive (pull request)
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          docker save tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
+          docker save telegrambotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
 
       - name: Upload image as artifact
         uses: actions/upload-artifact@v2
