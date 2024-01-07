@@ -1,5 +1,5 @@
-ARG APLINE_VERSION
-FROM alpine:${APLINE_VERSION} as build
+ARG ALPINE_VERSION=latest
+FROM alpine:${ALPINE_VERSION} as build
 
 ENV CXXFLAGS=""
 WORKDIR /usr/src/telegram-bot-api
@@ -13,7 +13,7 @@ RUN mkdir -p build \
  && cmake --build . --target install -j ${nproc} \
  && strip /usr/src/telegram-bot-api/bin/telegram-bot-api
 
-FROM alpine:${APLINE_VERSION}
+FROM alpine:${ALPINE_VERSION}
 
 ENV TELEGRAM_WORK_DIR="/var/lib/telegram-bot-api" \
     TELEGRAM_TEMP_DIR="/tmp/telegram-bot-api"
