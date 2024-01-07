@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-#  schedule:
-#    - cron: '20 4 * * *'
+  schedule:
+    - cron: '20 4 * * *'
 
 jobs:
   build:
@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_TAG: ${{ secrets.DOCKERHUB_OWNER }}/telegram-bot-api
+      ALPINE_VERSION: 3.19
     strategy:
       matrix:
         arch:
@@ -95,6 +96,8 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache
           platforms: ${{ matrix.arch }}
+          build-args: |
+            ALPINE_VERSION=${{ env.ALPINE_VERSION }}
           push: false
           load: true
           tags: |
