@@ -61,7 +61,7 @@ Use the `TELEGRAM_HTTP_IP_ADDRESS: "[::]"` parameter to listen on the ipv6 intra
 
 ### `TELEGRAM_HTTP_PORT`
 
-Set which port the api server should listen to ff you want to run the image in network mode as host and want to change the port.
+Set which port the api server should listen to if you want to run the image in network mode as host and want to change the port.
 
 If not set then the api server will listen to port 8081.
 
