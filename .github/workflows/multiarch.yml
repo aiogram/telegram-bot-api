@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_TAG: ${{ secrets.DOCKERHUB_OWNER }}/telegram-bot-api
-      ALPINE_VERSION: '3.20'
+      ALPINE_VERSION: 3.20
     strategy:
       matrix:
         arch:
@@ -62,7 +62,7 @@ jobs:
           cat $GITHUB_ENV > github.env
 
       - name: Upload environment info as artifact
-        uses: actions/upload-artifact@v3.0.0
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: github_env
           path: github.env
@@ -114,7 +114,7 @@ jobs:
           docker save ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
 
       - name: Upload image as artifact
-        uses: actions/upload-artifact@v3.0.0
+        uses: actions/upload-artifact@v4.3.0
         with:
           name: image_${{ env.SAFE_ARCH }}
           path: ${{ env.SAFE_ARCH }}.tar
