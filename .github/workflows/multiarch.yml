@@ -63,6 +63,7 @@ jobs:
 
       - name: Upload environment info as artifact
         uses: actions/upload-artifact@v4.3.3
+        if: matrix.arch == 'linux/amd64'  # Run this step only once per all matrix builds
         with:
           name: github_env
           path: github.env
