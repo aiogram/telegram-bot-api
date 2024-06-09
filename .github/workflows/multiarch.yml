@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_TAG: ${{ secrets.DOCKERHUB_OWNER }}/telegram-bot-api
-      ALPINE_VERSION: 3.20
+      ALPINE_VERSION: '3.20'
     strategy:
       matrix:
         arch:
