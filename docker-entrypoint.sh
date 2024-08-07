@@ -43,6 +43,27 @@ fi
 
 COMMAND="telegram-bot-api ${DEFAULT_ARGS}${CUSTOM_ARGS}"
 
+file_env() {
+  local var_name="$1"
+  local file_var_name="$2"
+
+  eval file_path="\$${file_var_name}"
+  eval current_value="\$${var_name}"
+
+  if [ -n "$file_path" ]; then
+    if [ -n "$current_value" ]; then
+      echo "Error: both ${file_var_name} and ${var_name} env vars are set, expected only one of them"
+      exit 1
+    fi
+
+    file_content=$(< "$file_path")
+    export "$var_name=$file_content"
+  fi
+}
+
+file_env "TELEGRAM_API_ID" "TELEGRAM_API_ID_FILE"
+file_env "TELEGRAM_API_HASH" "TELEGRAM_API_HASH_FILE"
+
 echo "$COMMAND"
 # shellcheck disable=SC2086
 exec $COMMAND
