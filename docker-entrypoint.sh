@@ -47,17 +47,27 @@ file_env() {
   local var_name="$1"
   local file_var_name="$2"
 
-  eval file_path="\$${file_var_name}"
-  eval current_value="\$${var_name}"
+  var_value=$(printenv "$var_name") || var_value=""
+  file_path=$(printenv "$file_var_name") || file_path=""
 
-  if [ -n "$file_path" ]; then
-    if [ -n "$current_value" ]; then
-      echo "Error: both ${file_var_name} and ${var_name} env vars are set, expected only one of them"
-      exit 1
+  if [ -z "$var_value" ] && [ -z "$file_path" ]; then
+    echo "error: expected $var_name or $file_var_name env vars to be set"
+    exit 1
+
+  elif [ -n "$var_value" ] && [ -n "$file_path" ]; then
+    echo "both and $var_name $file_var_name env vars are set, expected only one of them"
+    exit 1
+
+  else
+    if [ -n $file_path ]; then
+      if [ -f "$file_path" ]; then
+        file_content=$(cat "$file_path")
+        export "$var_name=$file_content"
+      else
+        echo "error: file '$file_path' does not exist"
+        exit 1
+      fi
     fi
-
-    file_content=$(< "$file_path")
-    export "$var_name=$file_content"
   fi
 }
 
