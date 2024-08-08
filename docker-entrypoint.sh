@@ -22,7 +22,7 @@ file_env() {
         file_content=$(cat "$file_path")
         export "$var_name=$file_content"
       else
-        echo "error: file '$file_path' does not exist"
+        echo "error: $var_name=$file_path: file '$file_path' does not exist"
         exit 1
       fi
     fi
