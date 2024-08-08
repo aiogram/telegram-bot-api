@@ -17,7 +17,7 @@ file_env() {
     exit 1
 
   else
-    if [ -n $file_path ]; then
+    if [ -n "$file_path" ] && [ "$file_path" != "" ]; then
       if [ -f "$file_path" ]; then
         file_content=$(cat "$file_path")
         export "$var_name=$file_content"
