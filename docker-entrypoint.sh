@@ -1,6 +1,34 @@
 #!/bin/sh
 set -e
 
+file_env() {
+  local var_name="$1"
+  local file_var_name="$2"
+
+  var_value=$(printenv "$var_name") || var_value=""
+  file_path=$(printenv "$file_var_name") || file_path=""
+
+  if [ -z "$var_value" ] && [ -z "$file_path" ]; then
+    echo "error: expected $var_name or $file_var_name env vars to be set"
+    exit 1
+
+  elif [ -n "$var_value" ] && [ -n "$file_path" ]; then
+    echo "both and $var_name $file_var_name env vars are set, expected only one of them"
+    exit 1
+
+  else
+    if [ -n "$file_path" ] && [ "$file_path" != "" ]; then
+      if [ -f "$file_path" ]; then
+        file_content=$(cat "$file_path")
+        export "$var_name=$file_content"
+      else
+        echo "error: $var_name=$file_path: file '$file_path' does not exist"
+        exit 1
+      fi
+    fi
+  fi
+}
+
 USERNAME=telegram-bot-api
 GROUPNAME=telegram-bot-api
 
@@ -9,6 +37,9 @@ chown ${USERNAME}:${GROUPNAME} "${TELEGRAM_WORK_DIR}"
 if [ -n "${1}" ]; then
   exec "${*}"
 fi
+
+file_env "TELEGRAM_API_ID" "TELEGRAM_API_ID_FILE"
+file_env "TELEGRAM_API_HASH" "TELEGRAM_API_HASH_FILE"
 
 DEFAULT_ARGS="--dir=${TELEGRAM_WORK_DIR} --temp-dir=${TELEGRAM_TEMP_DIR} --username=${USERNAME} --groupname=${GROUPNAME}"
 CUSTOM_ARGS=""
@@ -51,5 +82,6 @@ fi
 COMMAND="telegram-bot-api ${DEFAULT_ARGS}${CUSTOM_ARGS}"
 
 echo "$COMMAND"
+
 # shellcheck disable=SC2086
 exec $COMMAND
