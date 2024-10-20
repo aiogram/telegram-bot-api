@@ -27,11 +27,9 @@ Enable statistics HTTP endpoint.
 
 Usage: `-e TELEGRAM_STAT=1 -p 8082:8082` and then check that `curl http://<host>:8082` returns server statistic
 
-
 ### `TELEGRAM_FILTER`
 
 "<remainder>/<modulo>". Allow only bots with 'bot_user_id % modulo == remainder'
-
 
 ### `TELEGRAM_MAX_WEBHOOK_CONNECTIONS`
 
@@ -60,6 +58,12 @@ allow the Bot API server to serve local requests
 ### `TELEGRAM_HTTP_IP_ADDRESS`
 
 Use the `TELEGRAM_HTTP_IP_ADDRESS: "[::]"` parameter to listen on the ipv6 intranet
+
+### `TELEGRAM_HTTP_PORT`
+
+Set which port the api server should listen to if you want to run the image in network mode as host and want to change the port.
+
+If not set then the api server will listen to port 8081.
 
 ## Start with persistent storage
 
