@@ -41,7 +41,7 @@ fi
 file_env "TELEGRAM_API_ID" "TELEGRAM_API_ID_FILE"
 file_env "TELEGRAM_API_HASH" "TELEGRAM_API_HASH_FILE"
 
-DEFAULT_ARGS="--http-port 8081 --dir=${TELEGRAM_WORK_DIR} --temp-dir=${TELEGRAM_TEMP_DIR} --username=${USERNAME} --groupname=${GROUPNAME}"
+DEFAULT_ARGS="--dir=${TELEGRAM_WORK_DIR} --temp-dir=${TELEGRAM_TEMP_DIR} --username=${USERNAME} --groupname=${GROUPNAME}"
 CUSTOM_ARGS=""
 
 if [ -n "$TELEGRAM_LOG_FILE" ]; then
@@ -70,6 +70,13 @@ if [ -n "$TELEGRAM_LOCAL" ]; then
 fi
 if [ -n "$TELEGRAM_HTTP_IP_ADDRESS" ]; then
   CUSTOM_ARGS="${CUSTOM_ARGS} --http-ip-address=$TELEGRAM_HTTP_IP_ADDRESS"
+fi
+
+# Set http-port arg
+if [ -n "$TELEGRAM_HTTP_PORT" ]; then
+  CUSTOM_ARGS="${CUSTOM_ARGS} --http-port=$TELEGRAM_HTTP_PORT"
+else
+  CUSTOM_ARGS="${CUSTOM_ARGS} --http-port=8081"
 fi
 
 COMMAND="telegram-bot-api ${DEFAULT_ARGS}${CUSTOM_ARGS}"
