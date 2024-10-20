@@ -1,5 +1,5 @@
 ARG ALPINE_VERSION=latest
-FROM alpine:${ALPINE_VERSION} as build
+FROM alpine:${ALPINE_VERSION} AS build
 
 ENV CXXFLAGS=""
 WORKDIR /usr/src/telegram-bot-api
