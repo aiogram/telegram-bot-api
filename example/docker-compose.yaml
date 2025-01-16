@@ -1,18 +1,17 @@
-version: '3.7'
-
 services:
   api:
     image: aiogram/telegram-bot-api:latest
-    restart: always
+    restart: unless-stopped
     environment:
-      TELEGRAM_API_ID:
-      TELEGRAM_API_HASH:
+      TELEGRAM_API_ID: "XXX"
+      TELEGRAM_API_HASH: "YYY"
+      #TELEGRAM_LOCAL: 1  # allow files >20mb
     volumes:
       - telegram-bot-api-data:/var/lib/telegram-bot-api
 
   nginx:
-    image: nginx:1.19-alpine
-    restart: always
+    image: nginx:1.27.3-alpine
+    restart: unless-stopped
     depends_on:
       - api
     volumes:
