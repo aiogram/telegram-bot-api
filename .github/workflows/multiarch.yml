@@ -26,10 +26,10 @@ jobs:
 
     steps:
       - name: Checkout current repo
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4
 
       - name: Checkout upstream repo
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4
         with:
           repository: tdlib/telegram-bot-api
           path: telegram-bot-api
@@ -62,17 +62,17 @@ jobs:
           cat $GITHUB_ENV > github.env
 
       - name: Upload environment info as artifact
-        uses: actions/upload-artifact@v4.3.3
+        uses: actions/upload-artifact@v4
         if: matrix.arch == 'linux/amd64'  # Run this step only once per all matrix builds
         with:
           name: github_env
           path: github.env
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3.0.0
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.3.0
+        uses: docker/setup-buildx-action@v3
 
       - name: Cache Docker layers
         uses: actions/cache@v4.0.2
@@ -83,14 +83,14 @@ jobs:
             ${{ runner.os }}-buildx-${{ env.SAFE_ARCH }}-
 
       - name: Login to Docker Hub registry
-        uses: docker/login-action@v3.2.0
+        uses: docker/login-action@v3
         if: ${{ github.event_name != 'pull_request' }}
         with:
           username: ${{ secrets.DOCKERHUB_LOGIN }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build image
-        uses: docker/build-push-action@v5.3.0
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
@@ -115,7 +115,7 @@ jobs:
           docker save ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
 
       - name: Upload image as artifact
-        uses: actions/upload-artifact@v4.3.0
+        uses: actions/upload-artifact@v4
         with:
           name: image_${{ env.SAFE_ARCH }}
           path: ${{ env.SAFE_ARCH }}.tar
@@ -130,7 +130,7 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4
 
       - name: Load environment info and built images
         run: |
@@ -143,14 +143,14 @@ jobs:
           docker load --input image_linuxppc64le/linuxppc64le.tar
 
       - name: Login to ghcr registry
-        uses: docker/login-action@v3.2.0
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker Hub registry
-        uses: docker/login-action@v3.2.0
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_LOGIN }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
