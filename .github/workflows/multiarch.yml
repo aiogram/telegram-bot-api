@@ -22,6 +22,7 @@ jobs:
           - linux/arm/v6
           - linux/arm/v7
           - linux/arm64
+          - linux/ppc64le
 
     steps:
       - name: Checkout current repo
@@ -139,6 +140,7 @@ jobs:
           docker load --input image_linuxarmv6/linuxarmv6.tar
           docker load --input image_linuxarmv7/linuxarmv7.tar
           docker load --input image_linuxarm64/linuxarm64.tar
+          docker load --input image_linuxppc64le/linuxppc64le.tar
 
       - name: Login to ghcr registry
         uses: docker/login-action@v3.2.0
@@ -160,7 +162,8 @@ jobs:
             --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64 \
             --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 \
             --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64
+            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
+            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
           docker manifest push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}
 
           docker manifest create ${{ env.IMAGE_TAG }}:latest \
@@ -168,5 +171,6 @@ jobs:
             --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64 \
             --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 \
             --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64
+            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
+            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
           docker manifest push ${{ env.IMAGE_TAG }}:latest
