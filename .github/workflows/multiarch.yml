@@ -117,7 +117,7 @@ jobs:
       - name: Upload image as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: images/${{ env.SAFE_ARCH }}
+          name: ${{ env.SAFE_ARCH }}
           path: ${{ env.SAFE_ARCH }}.tar
 
   push-manifest:
@@ -132,7 +132,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          path: images/
+          pattern: image_*/*.tar
 
       - name: Load environment info and built images
         run: |
