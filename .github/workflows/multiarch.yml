@@ -117,7 +117,7 @@ jobs:
       - name: Upload image as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.SAFE_ARCH }}
+          name: image_${{ env.SAFE_ARCH }}
           path: ${{ env.SAFE_ARCH }}.tar
 
   push-manifest:
@@ -131,23 +131,16 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
-        with:
-          pattern: '*.tar'
-
-      - name: Download env
-        uses: actions/download-artifact@v4
-        with:
-          name: github_env
 
       - name: Load environment info and built images
         run: |
           cat github.env > $GITHUB_ENV
-          docker load --input linux386.tar
-          docker load --input linuxamd64.tar
-          docker load --input linuxarmv6.tar
-          docker load --input linuxarmv7.tar
-          docker load --input linuxarm64.tar
-          docker load --input linuxppc64le.tar
+          docker load --input image_linux386/linux386.tar
+          docker load --input image_linuxamd64/linuxamd64.tar
+          docker load --input image_linuxarmv6/linuxarmv6.tar
+          docker load --input image_linuxarmv7/linuxarmv7.tar
+          docker load --input image_linuxarm64/linuxarm64.tar
+          docker load --input image_linuxppc64le/linuxppc64le.tar
 
       - name: Login to ghcr registry
         uses: docker/login-action@v3
