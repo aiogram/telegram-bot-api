@@ -1,11 +1,12 @@
 name: Docker multi-arch build and push
 
 on:
-  push:
-    branches:
-      - master
-  schedule:
-    - cron: '20 4 * * *'
+  # push:
+  #   branches:
+  #     - master
+  # schedule:
+  #   - cron: '20 4 * * *'
+  pull_request: { }
 
 jobs:
   build:
