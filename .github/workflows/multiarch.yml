@@ -137,19 +137,19 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
 
-      - name: Load environment info and built images
-        run: |
-          cat github.env > $GITHUB_ENV
-          docker load --input image_linux386/linux386.tar
-          docker load --input image_linuxamd64/linuxamd64.tar
-          docker load --input image_linuxarmv6/linuxarmv6.tar
-          docker load --input image_linuxarmv7/linuxarmv7.tar
-          docker load --input image_linuxarm64/linuxarm64.tar
-          docker load --input image_linuxppc64le/linuxppc64le.tar
-
       - name: Check downloaded artifacts
         run: |
           ls -al
+
+      # - name: Load environment info and built images
+      #   run: |
+      #     cat github.env > $GITHUB_ENV
+      #    docker load --input image_linux386/linux386.tar
+      #    docker load --input image_linuxamd64/linuxamd64.tar
+      #    docker load --input image_linuxarmv6/linuxarmv6.tar
+      #    docker load --input image_linuxarmv7/linuxarmv7.tar
+      #    docker load --input image_linuxarm64/linuxarm64.tar
+      #    docker load --input image_linuxppc64le/linuxppc64le.tar
 
       #- name: Login to ghcr registry
       #  uses: docker/login-action@v3
