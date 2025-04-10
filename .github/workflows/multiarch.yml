@@ -28,12 +28,12 @@ jobs:
       - name: Checkout current repo
         uses: actions/checkout@v4
 
-      - name: Checkout upstream repo
-        uses: actions/checkout@v4
-        with:
-          repository: tdlib/telegram-bot-api
-          path: telegram-bot-api
-          submodules: recursive
+      # - name: Checkout upstream repo
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: tdlib/telegram-bot-api
+      #     path: telegram-bot-api
+      #     submodules: recursive
 
       - name: Get version
         run: |
@@ -68,51 +68,55 @@ jobs:
           name: github_env
           path: github.env
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      # - name: Set up QEMU
+      #   uses: docker/setup-qemu-action@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v3
 
-      - name: Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ env.SAFE_ARCH }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-${{ env.SAFE_ARCH }}-
+      # - name: Cache Docker layers
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-buildx-${{ env.SAFE_ARCH }}-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-buildx-${{ env.SAFE_ARCH }}-
 
-      - name: Login to Docker Hub registry
-        uses: docker/login-action@v3
-        if: ${{ github.event_name != 'pull_request' }}
-        with:
-          username: ${{ secrets.DOCKERHUB_LOGIN }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # - name: Login to Docker Hub registry
+      #   uses: docker/login-action@v3
+      #   if: ${{ github.event_name != 'pull_request' }}
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_LOGIN }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache
-          platforms: ${{ matrix.arch }}
-          build-args: |
-            ALPINE_VERSION=${{ env.ALPINE_VERSION }}
-          push: false
-          load: true
-          tags: |
-            ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
+      # - name: Build image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     cache-from: type=local,src=/tmp/.buildx-cache
+      #     cache-to: type=local,mode=max,dest=/tmp/.buildx-cache
+      #     platforms: ${{ matrix.arch }}
+      #     build-args: |
+      #       ALPINE_VERSION=${{ env.ALPINE_VERSION }}
+      #     push: false
+      #     load: true
+      #     tags: |
+      #       ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
 
-      - name: Tag and push image
-        if: ${{ github.event_name != 'pull_request' }}
+      # - name: Tag and push image
+      #   if: ${{ github.event_name != 'pull_request' }}
+      #   run: |
+      #     docker push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
+
+      # - name: Save image as tar archive
+      #   if: ${{ github.event_name != 'pull_request' }}
+      #   run: |
+      #     docker save ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
+
+      - name: Fake generate image
         run: |
-          docker push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
-
-      - name: Save image as tar archive
-        if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          docker save ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
+          touch ${{ env.SAFE_ARCH }}.tar
 
       - name: Upload image as artifact
         uses: actions/upload-artifact@v4
@@ -123,7 +127,7 @@ jobs:
   push-manifest:
     name: Create and push multi-arch Docker manifest
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' }}
+    # if: ${{ github.event_name != 'pull_request' }}
     env:
       DOCKER_CLI_EXPERIMENTAL: enabled
     needs: build
@@ -142,35 +146,39 @@ jobs:
           docker load --input image_linuxarm64/linuxarm64.tar
           docker load --input image_linuxppc64le/linuxppc64le.tar
 
-      - name: Login to ghcr registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Login to Docker Hub registry
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_LOGIN }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Create and push manifest
+      - name: Check downloaded artifacts
         run: |
-          docker manifest create ${{ env.IMAGE_TAG }}:${{ env.VERSION }} \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
-          docker manifest push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}
+          ls -al
 
-          docker manifest create ${{ env.IMAGE_TAG }}:latest \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
-            --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
-          docker manifest push ${{ env.IMAGE_TAG }}:latest
+      #- name: Login to ghcr registry
+      #  uses: docker/login-action@v3
+      #  with:
+      #    registry: ghcr.io
+      #    username: ${{ github.actor }}
+      #    password: ${{ secrets.GITHUB_TOKEN }}
+
+      #- name: Login to Docker Hub registry
+      #  uses: docker/login-action@v3
+      #  with:
+      #    username: ${{ secrets.DOCKERHUB_LOGIN }}
+      #    password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      #- name: Create and push manifest
+      #  run: |
+      #    docker manifest create ${{ env.IMAGE_TAG }}:${{ env.VERSION }} \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386 \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64 \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7 \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
+      #    docker manifest push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}
+
+      #    docker manifest create ${{ env.IMAGE_TAG }}:latest \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386 \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64 \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7 \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
+      #      --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
+      #    docker manifest push ${{ env.IMAGE_TAG }}:latest
