@@ -89,6 +89,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_LOGIN }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Set build parameters
+        id: build-params
+        run: |
+          # Get available CPUs, use 75% for build, minimum 2
+          AVAILABLE_CPUS=$(nproc)
+          OPTIMAL_NPROC=$(( AVAILABLE_CPUS * 3 / 4 ))
+          OPTIMAL_NPROC=$(( OPTIMAL_NPROC > 1 ? OPTIMAL_NPROC : 2 ))
+          
+          # ARM architectures might need special handling
+          if [[ "${{ matrix.arch }}" == *"arm"* ]]; then
+            # For ARM, be more conservative with resources
+            OPTIMAL_NPROC=$(( OPTIMAL_NPROC > 2 ? 2 : OPTIMAL_NPROC ))
+          fi
+          
+          echo "nproc=${OPTIMAL_NPROC}" >> $GITHUB_OUTPUT
+
       - name: Build image
         uses: docker/build-push-action@v6
         env:
@@ -102,6 +118,7 @@ jobs:
           platforms: ${{ matrix.arch }}
           build-args: |
             ALPINE_VERSION=${{ env.ALPINE_VERSION }}
+            nproc=${{ steps.build-params.outputs.nproc }}
           push: false
           load: true
           tags: |
