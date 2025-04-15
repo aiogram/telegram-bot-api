@@ -154,7 +154,7 @@ jobs:
 
       - name: Load environment info and built images
         run: |
-          cat github.env > $GITHUB_ENV
+          cat github_env/github.env > $GITHUB_ENV
           docker load --input image_linux386/linux386.tar
           docker load --input image_linuxamd64/linuxamd64.tar
           docker load --input image_linuxarmv6/linuxarmv6.tar
