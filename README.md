@@ -29,15 +29,15 @@ Usage: `-e TELEGRAM_STAT=1 -p 8082:8082` and then check that `curl http://<host>
 
 ### `TELEGRAM_FILTER`
 
-"<remainder>/<modulo>". Allow only bots with 'bot_user_id % modulo == remainder'
+Format: "\<remainder>/\<modulo>". Allow only bots with 'bot_user_id % modulo == remainder'.
 
 ### `TELEGRAM_MAX_WEBHOOK_CONNECTIONS`
 
-default value of the maximum webhook connections per bot
+Default value of the maximum webhook connections per bot
 
 ### `TELEGRAM_VERBOSITY`
 
-log verbosity level
+Log verbosity level
 
 ### `TELEGRAM_LOG_FILE`
 
@@ -45,7 +45,7 @@ Filename where logs will be redirected (By default logs will be written to stdou
 
 ### `TELEGRAM_MAX_CONNECTIONS`
 
-maximum number of open file descriptors
+Maximum number of open file descriptors
 
 ### `TELEGRAM_PROXY`
 
@@ -53,7 +53,7 @@ HTTP proxy server for outgoing webhook requests in the format http://host:port
 
 ### `TELEGRAM_LOCAL`
 
-allow the Bot API server to serve local requests
+Allow the Bot API server to serve local requests
 
 ### `TELEGRAM_HTTP_IP_ADDRESS`
 
