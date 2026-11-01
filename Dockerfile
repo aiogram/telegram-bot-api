@@ -6,6 +6,9 @@ WORKDIR /usr/src/telegram-bot-api
 
 RUN apk add --no-cache --update alpine-sdk linux-headers git zlib-dev openssl-dev gperf cmake
 COPY telegram-bot-api /usr/src/telegram-bot-api
+COPY patches/webhook-user-agent.patch /tmp/webhook-user-agent.patch
+RUN git apply --check /tmp/webhook-user-agent.patch \
+ && git apply /tmp/webhook-user-agent.patch
 ARG nproc=1
 RUN mkdir -p build \
  && cd build \

@@ -13,6 +13,17 @@ Before start, you will need to obtain `api-id` and `api-hash` as described in ht
 And then to start the Telegram Bot API all you need to do is
 `docker run -d -p 8081:8081 --name=telegram-bot-api --restart=always -v telegram-bot-api-data:/var/lib/telegram-bot-api -e TELEGRAM_API_ID=<api_id> -e TELEGRAM_API_HASH=<api-hash> aiogram/telegram-bot-api:latest`
 
+## Outgoing webhook User-Agent
+
+Webhook POST requests include `User-Agent: TelegramBotWebhook/1.0`. Some hosting
+providers reject requests without a User-Agent header, which otherwise prevents
+delivery even when the webhook URL is configured correctly.
+
+The header is added to the upstream server at build time using
+`patches/webhook-user-agent.patch`. The build checks patch applicability before
+compilation and fails if the upstream source becomes incompatible. Setting a
+header on a `setWebhook` API request does not change outgoing webhook headers.
+
 ## Configuration
 
 Container can be configured via environment variables
