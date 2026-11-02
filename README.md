@@ -15,9 +15,10 @@ And then to start the Telegram Bot API all you need to do is
 
 ## Outgoing webhook User-Agent
 
-Webhook POST requests include `User-Agent: TelegramBotWebhook/1.0`. Some hosting
+Webhook POST requests include `User-Agent: WebhookDelivery/1.0`. Some hosting
 providers reject requests without a User-Agent header, which otherwise prevents
 delivery even when the webhook URL is configured correctly.
+The neutral name also avoids recipient-side crawler filters matching `bot`.
 
 The header is added to the upstream server at build time using
 `patches/webhook-user-agent.patch`. The build checks patch applicability before
